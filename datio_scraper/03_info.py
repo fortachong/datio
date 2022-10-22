@@ -65,7 +65,7 @@ if __name__ == "__main__":
     # Parámetros de entrada archivos de entrada y salida
     args = len(sys.argv) - 1
     if(args < 2):
-        print("Uso: 02_codificador.py [carpeta de entrada] [carpeta de salida]")
+        print("Uso: 03_info.py [carpeta de entrada] [carpeta de salida]")
         exit()
 
     inicio = time.time()
@@ -102,20 +102,17 @@ if __name__ == "__main__":
                 i = 0
                 with open(archivo, 'w') as f:
                     for idx, row in data__.iterrows():
-                        print(row)
+                        # print(row)
                         ultimo_error = idx
                         print(f"Procesando idx_codigo: {row['idx_codigo']}")
-                        
                         info = obtener_informacion(int(row['codigo_1']), int(row['codigo_2']))
-
-                        print(info)
                         if info:
                             if idx == 0:
                                 k_ = list(info.keys())
-                                st_ = ",".join(k_)
+                                st_ = "Index|codigo_1|codigo_2|idx_codigo|" + "|".join(k_)
                                 f.write(f"{st_}\n")
                             inf_ = info.values()
-                            st_ = ",".join(inf_)
+                            st_ = f"{row['Index']}|{row['codigo_1']}|{row['codigo_2']}|{row['idx_codigo']}|" + "|".join(inf_)
                             f.write(f"{st_}\n")
                 break
             except Exception as e:
