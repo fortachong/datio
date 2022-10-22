@@ -28,3 +28,6 @@ python 03_info.py data/codigos data/info
 ```code
 python 04_limpiador_info.py data/info data/info_final
 ``` 
+
+#### Archivo final
+El archivo procesado final hasta el momento se encuentra en data/info_final/info_final.csv. Es un archivo separado por | (pipes)
