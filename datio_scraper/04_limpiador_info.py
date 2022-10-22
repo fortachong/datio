@@ -26,7 +26,7 @@ if __name__ == "__main__":
     # Parámetros de entrada archivos de entrada y salida
     args = len(sys.argv) - 1
     if(args < 2):
-        print("Uso: 03_info.py [carpeta de entrada] [carpeta de salida]")
+        print("Uso: 04_limpiador_info.py [carpeta de entrada] [carpeta de salida]")
         exit()
 
     inicio = time.time()
