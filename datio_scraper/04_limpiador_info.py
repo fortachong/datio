@@ -11,12 +11,15 @@ import re
 def min_max_ocupacion(st):
     minimo = np.NINF
     maximo = np.PINF
-    m = re.findall("[0-9]+", st)
-    if len(m) == 1: 
-        minimo = m[0]
-    elif len(m) == 2: 
-        minimo = m[0]
-        maximo = m[1]
+    try:
+        m = re.findall("[0-9]+", st)
+        if len(m) == 1: 
+            minimo = m[0]
+        elif len(m) == 2: 
+            minimo = m[0]
+            maximo = m[1]
+    except:
+        pass
     return minimo, maximo
 
 if __name__ == "__main__":
@@ -36,10 +39,14 @@ if __name__ == "__main__":
     for archivo in archivos_entrada:
         arch = os.path.join(carpeta_entrada, archivo)
         # Leer en pandas y consolidarlos
-        d0 = pd.read_csv(arch, sep='|')
+        try:
+            d0 = pd.read_csv(arch, sep='|')
+        except:
+            continue 
         data.append(d0)
 
     if len(data):
+        info_limpia = pd.read_csv('data/limpieza/limpio.csv')
         data_ = pd.concat(data, ignore_index=True, sort=False)
 
         cols = [
@@ -68,7 +75,8 @@ if __name__ == "__main__":
         d0['min_ocupacion'] = d0['per_ocu'].map(lambda x: min_max_ocupacion(x)[0])
         d0['max_ocupacion'] = d0['per_ocu'].map(lambda x: min_max_ocupacion(x)[1])
 
-        d0.to_csv(f"{carpeta_salida}/info_final.csv", sep="|", index=False)
+        d1 = d0.merge(info_limpia, on='Index')
+        d1.to_csv(f"{carpeta_salida}/info_final.csv", sep="|", index=False)
 
     tiempo = time.time() - inicio
     print("Tiempo total: {:.4f} seg.".format(tiempo))        
