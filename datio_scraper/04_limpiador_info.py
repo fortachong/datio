@@ -34,20 +34,26 @@ if __name__ == "__main__":
     carpeta_entrada = sys.argv[1]
     carpeta_salida = sys.argv[2] 
 
-    data = []
+    data = pd.DataFrame()
     archivos_entrada = os.listdir(carpeta_entrada)
-    for archivo in archivos_entrada:
+    num_archivos = len(archivos_entrada)
+
+    for idx, archivo in enumerate(archivos_entrada):
         arch = os.path.join(carpeta_entrada, archivo)
+        print(f"Leyendo archivo {idx+1} de {num_archivos}: {archivo}")
         # Leer en pandas y consolidarlos
         try:
             d0 = pd.read_csv(arch, sep='|')
+            if idx == 0:
+                data = d0.copy()
+            else:
+                data = pd.concat([data, d0], ignore_index=True, sort=False)
         except:
             continue 
-        data.append(d0)
+        
 
     if len(data):
         info_limpia = pd.read_csv('data/limpieza/limpio.csv')
-        data_ = pd.concat(data, ignore_index=True, sort=False)
 
         cols = [
             'Index',
@@ -70,7 +76,7 @@ if __name__ == "__main__":
             'per_ocu'
         ]
         
-        d0 = data_[cols].copy()
+        d0 = data[cols].copy()
         d0['entidad'] = d0['entidad'].str.strip()
         d0['min_ocupacion'] = d0['per_ocu'].map(lambda x: min_max_ocupacion(x)[0])
         d0['max_ocupacion'] = d0['per_ocu'].map(lambda x: min_max_ocupacion(x)[1])
